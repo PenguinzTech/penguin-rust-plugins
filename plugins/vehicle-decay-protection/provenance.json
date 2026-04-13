@@ -1,0 +1,14 @@
+{
+  "slug": "vehicle-decay-protection",
+  "filename": "VehicleDecayProtection.cs",
+  "version": "1776119938",
+  "sha256": "5a0b154bc41c7e2764ce8692800099fc77cbd1af41145d6a690d4b54efa7ea46",
+  "source_url": "https://umod.org/plugins/vehicle-decay-protection",
+  "source_raw_url": "https://umod.org/plugins/vehicle-decay-protection.cs",
+  "source_api_url": "https://umod.org/plugins/vehicle-decay-protection.json",
+  "upstream_author": "WhiteThunder",
+  "upstream_version": "2.9.0",
+  "fetched_at": "2026-04-13T22:38:59Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370493341",
+  "attribution_notice": "Source: https://umod.org/plugins/vehicle-decay-protection — author: WhiteThunder. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
