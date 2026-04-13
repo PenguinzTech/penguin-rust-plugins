@@ -1,0 +1,14 @@
+{
+  "slug": "whitelist",
+  "filename": "Whitelist.cs",
+  "version": "1776119929",
+  "sha256": "05d019b3d37fecc4de8f8cf0355384874eee1b0471693d3251c27877ae7cd925",
+  "source_url": "https://umod.org/plugins/whitelist",
+  "source_raw_url": "https://umod.org/plugins/whitelist.cs",
+  "source_api_url": "https://umod.org/plugins/whitelist.json",
+  "upstream_author": "MrBlue",
+  "upstream_version": "3.3.0",
+  "fetched_at": "2026-04-13T22:38:50Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370493363",
+  "attribution_notice": "Source: https://umod.org/plugins/whitelist — author: MrBlue. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
