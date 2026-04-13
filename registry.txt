@@ -1,0 +1,14 @@
+# Canonical list of plugins in this repo — slug|FileName.cs
+# Each entry has a corresponding plugins/${slug}/ directory and
+# .github/workflows/plugin-${slug}.yml workflow.
+admin-utilities|AdminUtilities.cs
+bgrade|BGrade.cs
+copy-paste|CopyPaste.cs
+vanish|Vanish.cs
+remover-tool|RemoverTool.cs
+unburnable-meat|UnburnableMeat.cs
+vehicle-decay-protection|VehicleDecayProtection.cs
+night-lantern|NightLantern.cs
+truepve|TruePVE.cs
+stack-size-controller|StackSizeController.cs
+whitelist|Whitelist.cs

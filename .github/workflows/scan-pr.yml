@@ -1,0 +1,47 @@
+name: scan-pr
+
+on:
+  pull_request:
+    paths:
+      - 'plugins/**'
+      - 'scanners/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Install scanners
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yara jq
+          pip install semgrep
+
+      - name: Collect changed .cs files
+        id: files
+        run: |
+          set -eu
+          git fetch origin "${{ github.base_ref }}"
+          FILES=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- 'plugins/**/*.cs' | tr '\n' ' ')
+          echo "files=${FILES}" >> "$GITHUB_OUTPUT"
+
+      - name: Dry-run scan
+        if: steps.files.outputs.files != ''
+        run: |
+          set -eu
+          for f in ${{ steps.files.outputs.files }}; do
+            echo "--- scanning $f ---"
+            yara -r scanners/yara-rules/ "$f" || true
+            semgrep --config scanners/semgrep-rules/ --config p/csharp --json "$f" > "/tmp/semgrep-$(basename $f).json" || true
+            jq -e '.results[] | select(.extra.severity == "ERROR")' "/tmp/semgrep-$(basename $f).json" && {
+              echo "::error::Critical finding in $f"
+              exit 1
+            } || echo "No critical findings in $f"
+          done

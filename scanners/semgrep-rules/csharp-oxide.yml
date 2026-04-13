@@ -1,0 +1,62 @@
+rules:
+  - id: oxide-process-start
+    pattern: Process.Start(...)
+    message: Process.Start detected — potential command execution vulnerability
+    languages: [csharp]
+    severity: ERROR
+
+  - id: oxide-shell-exec
+    patterns:
+      - pattern-either:
+          - pattern: $P.Start(new ProcessStartInfo(...))
+          - pattern: new ProcessStartInfo(...)
+    message: ProcessStartInfo with shell execution detected
+    languages: [csharp]
+    severity: ERROR
+
+  - id: oxide-assembly-load
+    patterns:
+      - pattern-either:
+          - pattern: Assembly.Load(...)
+          - pattern: Assembly.LoadFile(...)
+          - pattern: Assembly.LoadFrom(...)
+    message: Assembly.Load* detected — potential code injection vulnerability
+    languages: [csharp]
+    severity: ERROR
+
+  - id: oxide-reflection-invoke
+    pattern: $T.GetMethod($N).Invoke(...)
+    message: Reflection-based method invocation detected (legitimate reflection can trigger this)
+    languages: [csharp]
+    severity: WARNING
+
+  - id: oxide-webclient-download
+    patterns:
+      - pattern-either:
+          - pattern: new WebClient().DownloadString(...)
+          - pattern: new WebClient().DownloadFile(...)
+          - pattern: new WebClient().DownloadData(...)
+    message: WebClient download detected — verify legitimacy
+    languages: [csharp]
+    severity: WARNING
+
+  - id: oxide-httpclient-raw
+    pattern: new HttpClient().$M(...)
+    message: Raw HttpClient usage detected — verify necessity
+    languages: [csharp]
+    severity: WARNING
+
+  - id: oxide-env-exfil
+    pattern: Environment.GetEnvironmentVariables()
+    message: GetEnvironmentVariables detected — potential information disclosure
+    languages: [csharp]
+    severity: WARNING
+
+  - id: oxide-registry
+    patterns:
+      - pattern-either:
+          - pattern: Registry.$K.OpenSubKey(...)
+          - pattern: RegistryKey.OpenSubKey(...)
+    message: Registry access detected — no legitimate reason for Rust plugin
+    languages: [csharp]
+    severity: ERROR

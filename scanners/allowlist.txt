@@ -1,0 +1,4 @@
+# SHA256 hashes of plugin files with known false positives, one per line.
+# Format: <sha256>  <slug>  # reason
+# Example:
+# abcdef...  truepve  # WebClient use is for upstream update check, reviewed 2026-04-13
