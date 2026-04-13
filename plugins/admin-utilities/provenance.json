@@ -1,0 +1,14 @@
+{
+  "slug": "admin-utilities",
+  "filename": "AdminUtilities.cs",
+  "version": "1776120633",
+  "sha256": "18014594e310535f4caff5e36ae965b26b4bd1c1c8210b31f49469b3f8040e3c",
+  "source_url": "https://umod.org/plugins/admin-utilities",
+  "source_raw_url": "https://umod.org/plugins/admin-utilities.cs",
+  "source_api_url": "https://umod.org/plugins/admin-utilities.json",
+  "upstream_author": "dFxPhoeniX",
+  "upstream_version": "2.4.6",
+  "fetched_at": "2026-04-13T22:50:34Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370901758",
+  "attribution_notice": "Source: https://umod.org/plugins/admin-utilities — author: dFxPhoeniX. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
