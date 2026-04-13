@@ -1,0 +1,14 @@
+{
+  "slug": "truepve",
+  "filename": "TruePVE.cs",
+  "version": "1776119941",
+  "sha256": "97288174f7c059310fceed9285880f8fa3b1d28846d93b63e619578fab953d4e",
+  "source_url": "https://umod.org/plugins/truepve",
+  "source_raw_url": "https://umod.org/plugins/truepve.cs",
+  "source_api_url": "https://umod.org/plugins/truepve.json",
+  "upstream_author": "nivex",
+  "upstream_version": "2.3.7",
+  "fetched_at": "2026-04-13T22:39:03Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370493361",
+  "attribution_notice": "Source: https://umod.org/plugins/truepve — author: nivex. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
