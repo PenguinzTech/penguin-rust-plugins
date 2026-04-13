@@ -1,0 +1,14 @@
+{
+  "slug": "bgrade",
+  "filename": "BGrade.cs",
+  "version": "1776120631",
+  "sha256": "16a158061cf96f8d599184f43896326459cef727ae7f00b5fcd2f575e6474fa7",
+  "source_url": "https://umod.org/plugins/bgrade",
+  "source_raw_url": "https://umod.org/plugins/bgrade.cs",
+  "source_api_url": "https://umod.org/plugins/bgrade.json",
+  "upstream_author": "Ryan",
+  "upstream_version": "1.1.6",
+  "fetched_at": "2026-04-13T22:50:32Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370901771",
+  "attribution_notice": "Source: https://umod.org/plugins/bgrade — author: Ryan. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}

@@ -1,0 +1,13 @@
+/tmp/fresh.cs: OK
+
+----------- SCAN SUMMARY -----------
+Known viruses: 3627835
+Engine version: 1.4.3
+Scanned directories: 0
+Scanned files: 1
+Infected files: 0
+Data scanned: 0.04 MB
+Data read: 0.02 MB (ratio 1.67:1)
+Time: 7.900 sec (0 m 7 s)
+Start Date: 2026:04:13 22:50:15
+End Date:   2026:04:13 22:50:23
