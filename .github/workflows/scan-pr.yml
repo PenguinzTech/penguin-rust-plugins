@@ -1,10 +1,19 @@
 name: scan-pr
 
+# Dry-run of the full plugin scanner suite against any .cs files changed in a PR.
+# Runs the EXACT same policy gate as the per-plugin publish workflow — anything
+# that would get a plugin quarantined on main also fails the PR check here.
+#
+# This is the first line of defence for plugin contributions: no scan-dirty code
+# can even get reviewed, and scanner rule changes get tested against the full
+# existing plugin set before they land.
+
 on:
   pull_request:
     paths:
       - 'plugins/**'
       - 'scanners/**'
+      - 'registry.txt'
 
 permissions:
   contents: read
@@ -15,33 +24,120 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout PR head
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0  # need base ref for diff
 
       - name: Install scanners
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -eu
           sudo apt-get update
-          sudo apt-get install -y yara jq
+          sudo apt-get install -y clamav clamav-freshclam yara jq
+          sudo systemctl stop clamav-freshclam || true
+          sudo freshclam --quiet || true
           pip install semgrep
+          GH_TOKEN="${GH_TOKEN:-${GITHUB_TOKEN}}" gh release download v8.18.4 \
+            --repo gitleaks/gitleaks \
+            --pattern 'gitleaks_8.18.4_linux_x64.tar.gz' \
+            --output /tmp/gitleaks.tar.gz
+          tar -xz -C /usr/local/bin -f /tmp/gitleaks.tar.gz gitleaks
+          gh release download v0.69.3 \
+            --repo aquasecurity/trivy \
+            --pattern 'trivy_0.69.3_Linux-64bit.tar.gz' \
+            --output /tmp/trivy.tar.gz
+          tar -xz -C /usr/local/bin -f /tmp/trivy.tar.gz trivy
 
       - name: Collect changed .cs files
         id: files
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           set -eu
-          git fetch origin "${{ github.base_ref }}"
-          FILES=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- 'plugins/**/*.cs' | tr '\n' ' ')
-          echo "files=${FILES}" >> "$GITHUB_OUTPUT"
+          git fetch origin "${BASE_REF}" --depth=1
+          CHANGED=$(git diff --name-only --diff-filter=AM "origin/${BASE_REF}...HEAD" \
+                    -- 'plugins/**/*.cs' | tr '\n' ' ')
+          echo "Changed .cs files: ${CHANGED:-<none>}"
+          echo "files=${CHANGED}" >> "$GITHUB_OUTPUT"
 
-      - name: Dry-run scan
+      - name: Scan each changed .cs file
         if: steps.files.outputs.files != ''
         run: |
           set -eu
+          mkdir -p /tmp/reports
+          OVERALL_FAIL=0
           for f in ${{ steps.files.outputs.files }}; do
-            echo "--- scanning $f ---"
-            yara -r scanners/yara-rules/ "$f" || true
-            semgrep --config scanners/semgrep-rules/ --config p/csharp --json "$f" > "/tmp/semgrep-$(basename $f).json" || true
-            jq -e '.results[] | select(.extra.severity == "ERROR")' "/tmp/semgrep-$(basename $f).json" && {
-              echo "::error::Critical finding in $f"
-              exit 1
-            } || echo "No critical findings in $f"
+            echo "::group::scanning ${f}"
+            base=$(basename "$f" .cs)
+
+            clamscan "$f" | tee "/tmp/reports/${base}.clamav.txt"
+            yara -r scanners/yara-rules/ "$f" | tee "/tmp/reports/${base}.yara.txt"
+            semgrep --config scanners/semgrep-rules/ --config p/csharp \
+              --json --output "/tmp/reports/${base}.semgrep.json" "$f" || true
+            gitleaks detect --source "$f" \
+              --report-path "/tmp/reports/${base}.gitleaks.json" \
+              --report-format json --no-git || true
+            trivy fs "$f" | tee "/tmp/reports/${base}.trivy.txt"
+
+            # Same gate logic as the publish workflow — keep in sync.
+            CRITICAL=0
+            grep -qiE "^Infected files: [1-9]" "/tmp/reports/${base}.clamav.txt" \
+              && CRITICAL=1 && echo "::error file=${f}::ClamAV: infection detected"
+            grep -qE "critical" "/tmp/reports/${base}.yara.txt" \
+              && CRITICAL=1 && echo "::error file=${f}::YARA: critical match"
+            jq -e '.results[] | select(.extra.severity == "ERROR")' \
+              "/tmp/reports/${base}.semgrep.json" >/dev/null 2>&1 \
+              && CRITICAL=1 && echo "::error file=${f}::Semgrep: ERROR finding"
+            jq -e 'length > 0' "/tmp/reports/${base}.gitleaks.json" >/dev/null 2>&1 \
+              && CRITICAL=1 && echo "::error file=${f}::gitleaks: secret detected"
+            grep -qE "HIGH|CRITICAL" "/tmp/reports/${base}.trivy.txt" \
+              && CRITICAL=1 && echo "::error file=${f}::trivy: HIGH/CRITICAL finding"
+
+            if [ "$CRITICAL" = "1" ]; then
+              OVERALL_FAIL=1
+              echo "::error file=${f}::Plugin would be quarantined on main — fix before merge."
+            else
+              echo "::notice file=${f}::Clean — would publish on main."
+            fi
+            echo "::endgroup::"
           done
+          exit ${OVERALL_FAIL}
+
+      - name: Sanity check registry.txt additions
+        if: steps.files.outputs.files == ''
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -eu
+          # If this PR added entries to registry.txt, each must point at a real
+          # umod slug (HEAD request to umod.org). Catches typos and hijack attempts.
+          git fetch origin "${BASE_REF}" --depth=1
+          ADDED=$(git diff --diff-filter=A --unified=0 "origin/${BASE_REF}...HEAD" -- registry.txt \
+                  | grep -E '^\+[a-z0-9-]+\|' | sed 's/^+//' || true)
+          if [ -z "${ADDED}" ]; then
+            echo "No new registry.txt entries — skip validation."
+            exit 0
+          fi
+          FAIL=0
+          while IFS='|' read -r slug filename; do
+            [ -z "$slug" ] && continue
+            url="https://umod.org/plugins/${slug}.cs"
+            status=$(curl -s -o /dev/null -w '%{http_code}' -I "$url")
+            if [ "$status" = "200" ]; then
+              echo "::notice::${slug} resolves at ${url} (HTTP 200)"
+            else
+              echo "::error::${slug} does not resolve at ${url} (HTTP ${status})"
+              FAIL=1
+            fi
+          done <<< "${ADDED}"
+          exit ${FAIL}
+
+      - name: Upload scan reports
+        if: always() && steps.files.outputs.files != ''
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8  # v4.3.0
+        with:
+          name: scan-pr-reports
+          path: /tmp/reports/
+          retention-days: 14

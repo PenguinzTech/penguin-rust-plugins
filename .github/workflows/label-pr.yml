@@ -1,0 +1,49 @@
+name: Auto-Label Pull Requests
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR based on changed paths
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -eu
+
+          # Create labels if they don't exist
+          gh label create "plugin-proposal" --color "0E8A16" --description "Proposes new or modified plugin" 2>/dev/null || true
+          gh label create "needs-plugin-review" --color "D93F0B" --description "Requires plugin review" 2>/dev/null || true
+          gh label create "scanner-rules" --color "5319E7" --description "Scanner rules changes" 2>/dev/null || true
+          gh label create "ci" --color "C5DEF5" --description "CI/CD workflow changes" 2>/dev/null || true
+          gh label create "tooling" --color "FBCA04" --description "Build/deployment scripts" 2>/dev/null || true
+
+          # Get changed files
+          CHANGED=$(gh pr diff "$PR_NUMBER" --repo "$REPO" --name-only)
+
+          # Apply labels based on paths
+          if echo "$CHANGED" | grep -q "^plugins/"; then
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "plugin-proposal" 2>/dev/null || true
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "needs-plugin-review" 2>/dev/null || true
+          fi
+
+          if echo "$CHANGED" | grep -q "^scanners/"; then
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "scanner-rules" 2>/dev/null || true
+          fi
+
+          if echo "$CHANGED" | grep -q "^\.github/workflows/"; then
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "ci" 2>/dev/null || true
+          fi
+
+          if echo "$CHANGED" | grep -q "^scripts/"; then
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "tooling" 2>/dev/null || true
+          fi

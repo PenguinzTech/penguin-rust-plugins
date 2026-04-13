@@ -238,8 +238,11 @@ jobs:
           cp -r "plugins/${SLUG}/." "$STAGE/"
           (cd /tmp && tar -czf "${SLUG}-${EPOCH}.tar.gz" -C stage .)
           (cd /tmp && zip -r "${SLUG}-${EPOCH}.zip" . -i stage/\* >/dev/null)
-          sha256sum "/tmp/${SLUG}-${EPOCH}.tar.gz" > "/tmp/${SLUG}-${EPOCH}.tar.gz.sha256"
-          sha256sum "/tmp/${SLUG}-${EPOCH}.zip"    > "/tmp/${SLUG}-${EPOCH}.zip.sha256"
+          # Use relative basenames — sha256sum writes whatever path it's given into the
+          # sidecar, and `sha256sum -c` verifies against that literal path. Consumers in
+          # other tempdirs need basename-only references to work.
+          (cd /tmp && sha256sum "${SLUG}-${EPOCH}.tar.gz" > "${SLUG}-${EPOCH}.tar.gz.sha256")
+          (cd /tmp && sha256sum "${SLUG}-${EPOCH}.zip"    > "${SLUG}-${EPOCH}.zip.sha256")
           # Keyless blob signing — produces detached .sig + .pem (cert). Consumer verifies
           # with `cosign verify-blob --certificate-identity-regexp ... --certificate-oidc-issuer https://token.actions.githubusercontent.com`.
           # This makes the GitHub Release a standalone-verifiable artifact — no registry needed.
