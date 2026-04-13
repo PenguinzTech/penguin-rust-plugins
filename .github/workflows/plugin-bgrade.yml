@@ -224,11 +224,12 @@ jobs:
           done
           echo "epoch=${EPOCH}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish GitHub Release
+      - name: Publish GitHub Release (signed tarballs are the primary consumer artifact)
         if: steps.dedup.outputs.skip == 'false' && steps.policy.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           EPOCH: ${{ steps.commit.outputs.epoch }}
+          COSIGN_EXPERIMENTAL: "1"
         run: |
           set -eu
           TAG="${SLUG}-${EPOCH}"
@@ -239,13 +240,28 @@ jobs:
           (cd /tmp && zip -r "${SLUG}-${EPOCH}.zip" . -i stage/\* >/dev/null)
           sha256sum "/tmp/${SLUG}-${EPOCH}.tar.gz" > "/tmp/${SLUG}-${EPOCH}.tar.gz.sha256"
           sha256sum "/tmp/${SLUG}-${EPOCH}.zip"    > "/tmp/${SLUG}-${EPOCH}.zip.sha256"
+          # Keyless blob signing — produces detached .sig + .pem (cert). Consumer verifies
+          # with `cosign verify-blob --certificate-identity-regexp ... --certificate-oidc-issuer https://token.actions.githubusercontent.com`.
+          # This makes the GitHub Release a standalone-verifiable artifact — no registry needed.
+          cosign sign-blob --yes \
+            --output-signature "/tmp/${SLUG}-${EPOCH}.tar.gz.sig" \
+            --output-certificate "/tmp/${SLUG}-${EPOCH}.tar.gz.pem" \
+            "/tmp/${SLUG}-${EPOCH}.tar.gz"
+          cosign sign-blob --yes \
+            --output-signature "/tmp/${SLUG}-${EPOCH}.zip.sig" \
+            --output-certificate "/tmp/${SLUG}-${EPOCH}.zip.pem" \
+            "/tmp/${SLUG}-${EPOCH}.zip"
           gh release create "$TAG" \
             --title "${SLUG} ${EPOCH}" \
-            --notes "Scanned redistribution of umod plugin '${SLUG}' upstream version ${{ steps.fetch.outputs.upstream_version }}. See plugins/${SLUG}/reports/ in the tree for full scan output." \
+            --notes "Scanned redistribution of umod plugin '${SLUG}' upstream version ${{ steps.fetch.outputs.upstream_version }}. See plugins/${SLUG}/reports/ in the tree for full scan output. Tarballs are cosign-signed (keyless / Sigstore) — verify with \`cosign verify-blob\`." \
             "/tmp/${SLUG}-${EPOCH}.tar.gz" \
             "/tmp/${SLUG}-${EPOCH}.tar.gz.sha256" \
+            "/tmp/${SLUG}-${EPOCH}.tar.gz.sig" \
+            "/tmp/${SLUG}-${EPOCH}.tar.gz.pem" \
             "/tmp/${SLUG}-${EPOCH}.zip" \
             "/tmp/${SLUG}-${EPOCH}.zip.sha256" \
+            "/tmp/${SLUG}-${EPOCH}.zip.sig" \
+            "/tmp/${SLUG}-${EPOCH}.zip.pem" \
             "plugins/${SLUG}/${SLUG}.hash" \
             "plugins/${SLUG}/provenance.json" \
             "plugins/${SLUG}/sbom.cdx.json" \
