@@ -103,7 +103,7 @@ jobs:
 
       - name: Scan — gitleaks
         if: steps.dedup.outputs.skip == 'false'
-        run: gitleaks detect --source /tmp/fresh.cs --report-path /tmp/reports/gitleaks.txt --no-git || true
+        run: gitleaks detect --source /tmp/fresh.cs --report-path /tmp/reports/gitleaks.json --report-format json --no-git || true
 
       - name: Scan — trivy
         if: steps.dedup.outputs.skip == 'false'
@@ -125,7 +125,7 @@ jobs:
           grep -qiE "^Infected files: [1-9]" /tmp/reports/clamav.txt && CRITICAL=1 && echo "ClamAV: infection detected"
           grep -qE "critical" /tmp/reports/yara.txt && CRITICAL=1 && echo "YARA: critical match"
           jq -e '.results[] | select(.extra.severity == "ERROR")' /tmp/reports/semgrep.json >/dev/null 2>&1 && CRITICAL=1 && echo "Semgrep: ERROR finding"
-          [ -s /tmp/reports/gitleaks.txt ] && grep -q '.' /tmp/reports/gitleaks.txt && CRITICAL=1 && echo "gitleaks: secret detected"
+          jq -e 'length > 0' /tmp/reports/gitleaks.json >/dev/null 2>&1 && CRITICAL=1 && echo "gitleaks: secret detected"
           grep -qE "HIGH|CRITICAL" /tmp/reports/trivy.txt && CRITICAL=1 && echo "trivy: HIGH/CRITICAL finding"
           if [ "$CRITICAL" = "1" ]; then
             echo "CRITICAL findings — quarantining, no publish."
@@ -150,9 +150,11 @@ jobs:
             echo "### ClamAV"; echo '```'; cat /tmp/reports/clamav.txt; echo '```'
             echo "### YARA";   echo '```'; cat /tmp/reports/yara.txt;   echo '```'
             echo "### Semgrep"; echo '```json'; cat /tmp/reports/semgrep.json; echo '```'
-            echo "### gitleaks"; echo '```'; cat /tmp/reports/gitleaks.txt; echo '```'
+            echo "### gitleaks"; echo '```json'; cat /tmp/reports/gitleaks.json; echo '```'
             echo "### trivy"; echo '```'; cat /tmp/reports/trivy.txt; echo '```'
           } > "$BODY_FILE"
+          gh label create "plugin-quarantine" --color "B60205" --description "Plugin failed scan gate" 2>/dev/null || true
+          gh label create "plugin:${SLUG}" --color "1D76DB" --description "Plugin-specific: ${SLUG}" 2>/dev/null || true
           gh issue create \
             --title "[SCAN-FAIL] ${SLUG} — ${EPOCH}" \
             --label "plugin-quarantine,plugin:${SLUG}" \
