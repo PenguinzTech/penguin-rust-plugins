@@ -1,0 +1,14 @@
+{
+  "slug": "remover-tool",
+  "filename": "RemoverTool.cs",
+  "version": "1776119937",
+  "sha256": "36983a2b96d6742c654aebf68def053c69bb4b0101f910aa565dcb0c4fd50dbe",
+  "source_url": "https://umod.org/plugins/remover-tool",
+  "source_raw_url": "https://umod.org/plugins/remover-tool.cs",
+  "source_api_url": "https://umod.org/plugins/remover-tool.json",
+  "upstream_author": "Tryhard",
+  "upstream_version": "4.3.46",
+  "fetched_at": "2026-04-13T22:38:58Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370493333",
+  "attribution_notice": "Source: https://umod.org/plugins/remover-tool — author: Tryhard. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
