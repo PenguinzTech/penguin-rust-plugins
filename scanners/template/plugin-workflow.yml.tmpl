@@ -43,9 +43,9 @@ jobs:
             --output /tmp/gitleaks.tar.gz
           tar -xz -C /usr/local/bin -f /tmp/gitleaks.tar.gz gitleaks
           rm /tmp/gitleaks.tar.gz
-          gh release download v0.51.1 \
+          gh release download v0.69.3 \
             --repo aquasecurity/trivy \
-            --pattern 'trivy_0.51.1_Linux-64bit.tar.gz' \
+            --pattern 'trivy_0.69.3_Linux-64bit.tar.gz' \
             --output /tmp/trivy.tar.gz
           tar -xz -C /usr/local/bin -f /tmp/trivy.tar.gz trivy
           rm /tmp/trivy.tar.gz
