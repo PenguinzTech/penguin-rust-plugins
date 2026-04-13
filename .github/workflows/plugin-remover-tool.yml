@@ -212,7 +212,16 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "plugins/${SLUG}/"
           git commit -m "plugin(${SLUG}): v${EPOCH} — umod version ${{ steps.fetch.outputs.upstream_version }} (scan clean)"
-          git push
+          # Retry push with rebase — concurrent plugin workflows can race on main.
+          # Each commit touches only plugins/${SLUG}/ so rebase is always conflict-free.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              break
+            fi
+            echo "push attempt ${attempt} rejected — pulling and retrying..."
+            git pull --rebase origin main
+            sleep $((RANDOM % 5 + 1))
+          done
           echo "epoch=${EPOCH}" >> "$GITHUB_OUTPUT"
 
       - name: Publish GitHub Release
