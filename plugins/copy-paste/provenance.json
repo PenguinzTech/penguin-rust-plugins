@@ -1,0 +1,14 @@
+{
+  "slug": "copy-paste",
+  "filename": "CopyPaste.cs",
+  "version": "1776119943",
+  "sha256": "d48c7b01e5db6b39111d14fafdad9de458a05ed9ad27a36a1ea63a3b3234c07d",
+  "source_url": "https://umod.org/plugins/copy-paste",
+  "source_raw_url": "https://umod.org/plugins/copy-paste.cs",
+  "source_api_url": "https://umod.org/plugins/copy-paste.json",
+  "upstream_author": "misticos",
+  "upstream_version": "4.2.7",
+  "fetched_at": "2026-04-13T22:39:03Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370493368",
+  "attribution_notice": "Source: https://umod.org/plugins/copy-paste — author: misticos. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
