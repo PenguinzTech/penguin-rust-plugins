@@ -1,0 +1,14 @@
+{
+  "slug": "night-lantern",
+  "filename": "NightLantern.cs",
+  "version": "1776120626",
+  "sha256": "2bdff1377616ea33bb95dc7556cbf8f652164e8d8b925b8c029adebf0ea94784",
+  "source_url": "https://umod.org/plugins/night-lantern",
+  "source_raw_url": "https://umod.org/plugins/night-lantern.cs",
+  "source_api_url": "https://umod.org/plugins/night-lantern.json",
+  "upstream_author": "k1lly0u",
+  "upstream_version": "2.1.2",
+  "fetched_at": "2026-04-13T22:50:27Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370901741",
+  "attribution_notice": "Source: https://umod.org/plugins/night-lantern — author: k1lly0u. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
