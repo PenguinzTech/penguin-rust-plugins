@@ -1,0 +1,14 @@
+{
+  "slug": "vanish",
+  "filename": "Vanish.cs",
+  "version": "1776119939",
+  "sha256": "6ff5b0dd6f1897d1975f0df0ae39cc05cbaf358555c430f1a8eeac49fdfaa88e",
+  "source_url": "https://umod.org/plugins/vanish",
+  "source_raw_url": "https://umod.org/plugins/vanish.cs",
+  "source_api_url": "https://umod.org/plugins/vanish.json",
+  "upstream_author": "Whispers88",
+  "upstream_version": "2.1.2",
+  "fetched_at": "2026-04-13T22:39:00Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370493323",
+  "attribution_notice": "Source: https://umod.org/plugins/vanish — author: Whispers88. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
