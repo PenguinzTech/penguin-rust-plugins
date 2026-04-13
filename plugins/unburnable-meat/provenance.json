@@ -1,0 +1,14 @@
+{
+  "slug": "unburnable-meat",
+  "filename": "UnburnableMeat.cs",
+  "version": "1776119621",
+  "sha256": "c04ff88e4faad0a4e8136539ba0e9a236d55941f33a93e775764bb5b4a8a33de",
+  "source_url": "https://umod.org/plugins/unburnable-meat",
+  "source_raw_url": "https://umod.org/plugins/unburnable-meat.cs",
+  "source_api_url": "https://umod.org/plugins/unburnable-meat.json",
+  "upstream_author": "S642667",
+  "upstream_version": "1.0.1",
+  "fetched_at": "2026-04-13T22:33:42Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24370314834",
+  "attribution_notice": "Source: https://umod.org/plugins/unburnable-meat — author: S642667. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
