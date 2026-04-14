@@ -1,5 +1,8 @@
 # penguin-rust-plugins
 
+[![CodeQL](https://github.com/PenguinzTech/penguin-rust-plugins/actions/workflows/codeql.yml/badge.svg)](https://github.com/PenguinzTech/penguin-rust-plugins/actions/workflows/codeql.yml)
+[![Scan PR](https://github.com/PenguinzTech/penguin-rust-plugins/actions/workflows/scan-pr.yml/badge.svg)](https://github.com/PenguinzTech/penguin-rust-plugins/actions/workflows/scan-pr.yml)
+
 A third-party security scanning and redistribution layer for Oxide framework plugins hosted on umod.org. We are not the upstream authors of any plugin—we are a scanning service similar to Bitnami or Chainguard, which harden upstream software and make the security artifacts publicly auditable.
 
 ## Purpose & Scope

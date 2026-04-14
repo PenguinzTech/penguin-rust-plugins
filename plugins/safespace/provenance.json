@@ -1,0 +1,14 @@
+{
+  "slug": "safespace",
+  "filename": "SafeSpace.cs",
+  "version": "1.0.0",
+  "sha256": "219d8266f6a94ad7189e2c56ccbbfd987c4407dca9ac9d534c1c23dbee95eb18",
+  "source_url": "https://github.com/PenguinzTech/penguin-rust-base/blob/main/docker/plugins/SafeSpace.cs",
+  "source_raw_url": "https://raw.githubusercontent.com/PenguinzTech/penguin-rust-base/main/docker/plugins/SafeSpace.cs",
+  "source_api_url": "",
+  "upstream_author": "PenguinzTech",
+  "upstream_version": "1.0.0",
+  "fetched_at": "2026-04-13T00:00:00Z",
+  "fetched_by": "manual — first-party plugin",
+  "attribution_notice": "First-party plugin authored by PenguinzTech. Source: https://github.com/PenguinzTech/penguin-rust-base"
+}
