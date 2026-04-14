@@ -2,3 +2,7 @@
 *.swp
 .DS_Store
 node_modules/
+
+# .NET build artifacts
+tests/**/bin/
+tests/**/obj/
