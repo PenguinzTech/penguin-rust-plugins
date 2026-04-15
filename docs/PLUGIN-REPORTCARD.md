@@ -13,11 +13,10 @@ Generated: 2026-04-15
 
 ## Note on Columns
 
-- **Broken API**: N/A for existing plugins (analyzed separately)
-- **Deprecated API**: N/A for existing plugins
-- **Performance**: N/A for existing plugins
-- **Conflicts**: Analyzed for all plugins (new and existing)
-- **Overall**: N/A for existing plugins; status determined by worst issue (Broken > Conflicts > Performance > Deprecated) for new plugins
+- **Broken API / Deprecated API / Performance**: analyzed for plugins added in the bulk-umod import; N/A for pre-existing plugins
+- **Conflicts**: analyzed for all plugins
+- **Overall**: worst of (Broken > Conflicts > Performance > Deprecated); N/A for pre-existing plugins
+- Plugins with broken Oxide APIs have been removed and relocated to `penguin-rust-base` — see Relocated section below
 
 ---
 
@@ -26,33 +25,23 @@ Generated: 2026-04-15
 | Plugin | Broken API | Deprecated API | Performance | Conflicts | Overall |
 |--------|-----------|----------------|-------------|-----------|---------|
 | admin-deep-cover | ✅ | ⚠️ | ⚠️ | ⚠️ | ⚠️ |
-| anti-offline-raid | ❌ | ⚠️ | ⚠️ | ❌ | ❌ |
 | automated-events | ✅ | ✅ | ⚠️ | ⚠️ | ⚠️ |
-| better-chat | ❌ | ⚠️ | ⚠️ | ⚠️ | ❌ |
 | better-chat-filter | ✅ | ✅ | ⚠️ | ❌ | ⚠️ |
 | better-chat-flood | ✅ | ✅ | ✅ | ⚠️ | ⚠️ |
 | better-chat-global-mute | ✅ | ✅ | ✅ | ✅ | ✅ |
 | better-chat-ignore | ✅ | ✅ | ✅ | ✅ | ✅ |
 | better-chat-mentions | ✅ | ✅ | ✅ | ❌ | ⚠️ |
-| better-chat-mute | ❌ | ✅ | ✅ | ❌ | ❌ |
 | better-chat-toggle | ✅ | ✅ | ✅ | ⚠️ | ⚠️ |
 | clan-tags | ✅ | ✅ | ✅ | ❌ | ❌ |
 | clans | ✅ | ✅ | ✅ | ❌ | ⚠️ |
-| dynamic-pvp | ❌ | ✅ | ⚠️ | ⚠️ | ❌ |
 | economics | ✅ | ✅ | ✅ | ✅ | ✅ |
 | emote | ✅ | ✅ | ✅ | ✅ | ✅ |
 | friendly-fire | ✅ | ✅ | ✅ | ⚠️ | ✅ |
 | gui-announcements | ✅ | ✅ | ⚠️ | ✅ | ⚠️ |
 | landlord | ✅ | ✅ | ✅ | ✅ | ✅ |
-| nteleportation | ❌ | ⚠️ | ✅ | ⚠️ | ❌ |
-| player-administration | ❌ | ✅ | ✅ | ✅ | ❌ |
-| quests | ❌ | ⚠️ | ✅ | ✅ | ❌ |
-| tree-planter | ❌ | ✅ | ⚠️ | ✅ | ❌ |
 | ui-plus | ✅ | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | vehicle-deployed-locks | ✅ | ✅ | ⚠️ | ✅ | ⚠️ |
-| vehicle-license | ❌ | ✅ | ⚠️ | ✅ | ❌ |
 | zone-domes | ✅ | ✅ | ✅ | ⚠️ | ⚠️ |
-| zone-manager | ❌ | ✅ | ✅ | ❌ | ❌ |
 | zone-manager-auto-zones | ✅ | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | admin-utilities (existing) | N/A | N/A | N/A | ✅ | N/A |
 | bgrade (existing) | N/A | N/A | N/A | ⚠️ | N/A |
@@ -69,20 +58,29 @@ Generated: 2026-04-15
 
 ---
 
+## Relocated to penguin-rust-base (Patched)
+
+The following plugins were removed from this scan pipeline due to broken Oxide APIs.
+Patched versions (with `FindByID→FindAwakeOrSleeping`, `net.connection→Connection`,
+`ConVar.Chat.ChatChannel→Chat.ChatChannel`, `BuildingPrivlidge→BuildingPrivilege`,
+`CommunityEntity.ServerInstance→CuiHelper`) are baked into `penguin-rust-base` directly:
+
+| Plugin | Reason |
+|--------|--------|
+| anti-offline-raid | FindByID, .net.connection removed |
+| better-chat | FindByID, .net.connection removed |
+| better-chat-mute | ConVar.Chat.ChatChannel removed |
+| dynamic-pvp | FindByID removed |
+| nteleportation | BuildingPrivlidge typo API + .net.connection removed |
+| player-administration | FindByID removed (10+ instances) |
+| quests | FindByID removed |
+| tree-planter | CommunityEntity.ServerInstance removed |
+| vehicle-license | FindByID removed |
+| zone-manager | ConVar.Chat.ChatChannel + BuildingPrivlidge removed |
+
 ## Critical Issues
 
-The following plugins have ❌ Overall status and require immediate attention:
+The following plugins in this repo have conflict warnings requiring attention:
 
-- **anti-offline-raid** — Broken API (FindByID, .net.connection); HIGH conflict with ZoneManager/TruePVE on damage blocking
-- **better-chat** — Broken API (FindByID, .net.connection); bypassed by AdminDeepCover
-- **better-chat-mute** — Broken API (ConVar.Chat.ChatChannel removed); bypassed by AdminDeepCover
 - **clan-tags** — CRITICAL conflict — self-unloads when Clans is detected; mutually exclusive plugins
-- **dynamic-pvp** — Broken API (FindByID); MEDIUM zone lifecycle race with ZoneManagerAutoZones/TruePVE
-- **nteleportation** — Broken API (BuildingPrivlidge typo, .net.connection); MEDIUM init order dependency
-- **player-administration** — Broken API (FindByID, 10+ instances)
-- **quests** — Broken API (FindByID); deprecated OnPlayerChat usage
-- **tree-planter** — Broken API (CommunityEntity.ServerInstance); risky while(true) coroutine
-- **vehicle-license** — Broken API (FindByID); no interval bounds checking
-- **zone-manager** — Broken API (ConVar.Chat.ChatChannel, BuildingPrivlidge); HIGH conflict with TruePVE/AntiOfflineRaid
-
-Additionally, **truepve** (existing) has HIGH conflict on OnEntityTakeDamage with ZoneManager/AntiOfflineRaid.
+- **truepve** (existing) — HIGH conflict on OnEntityTakeDamage with ZoneManager/AntiOfflineRaid
