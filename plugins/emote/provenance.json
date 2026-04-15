@@ -1,0 +1,14 @@
+{
+  "slug": "emote",
+  "filename": "Emote.cs",
+  "version": "1776286446",
+  "sha256": "4cc43d161ea2d2a80f41038d076d41a16e3c120418f228b11b61417aee2d7373",
+  "source_url": "https://umod.org/plugins/emote",
+  "source_raw_url": "https://umod.org/plugins/emote.cs",
+  "source_api_url": "https://umod.org/plugins/emote.json",
+  "upstream_author": "Hirsty",
+  "upstream_version": "1.0.12",
+  "fetched_at": "2026-04-15T20:54:07Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24477818850",
+  "attribution_notice": "Source: https://umod.org/plugins/emote — author: Hirsty. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
