@@ -1,15 +1,44 @@
+# .github/workflows/plugin-${slug}.yml workflow.
 # Canonical list of plugins in this repo — slug|FileName.cs
 # Each entry has a corresponding plugins/${slug}/ directory and
-# .github/workflows/plugin-${slug}.yml workflow.
+admin-deep-cover|AdminDeepCover.cs
 admin-utilities|AdminUtilities.cs
+anti-offline-raid|AntiOfflineRaid.cs
+automated-events|AutomatedEvents.cs
+better-chat-filter|BetterChatFilter.cs
+better-chat-flood|BetterChatFlood.cs
+better-chat-global-mute|BetterChatGlobalMute.cs
+better-chat-ignore|BetterChatIgnore.cs
+better-chat-mentions|BetterChatMentions.cs
+better-chat-mute|BetterChatMute.cs
+better-chat-toggle|BetterChatToggle.cs
+better-chat|BetterChat.cs
 bgrade|BGrade.cs
+clan-tags|ClanTags.cs
+clans|Clans.cs
 copy-paste|CopyPaste.cs
-vanish|Vanish.cs
-remover-tool|RemoverTool.cs
-unburnable-meat|UnburnableMeat.cs
-vehicle-decay-protection|VehicleDecayProtection.cs
+dynamic-pvp|DynamicPVP.cs
+economics|Economics.cs
+emote|Emote.cs
+friendly-fire|FriendlyFire.cs
+gui-announcements|GUIAnnouncements.cs
+landlord|LandLord.cs
 night-lantern|NightLantern.cs
-truepve|TruePVE.cs
-stack-size-controller|StackSizeController.cs
-whitelist|Whitelist.cs
+nteleportation|NTeleportation.cs
+player-administration|PlayerAdministration.cs
+quests|Quests.cs
+remover-tool|RemoverTool.cs
 safespace|SafeSpace.cs
+stack-size-controller|StackSizeController.cs
+tree-planter|TreePlanter.cs
+truepve|TruePVE.cs
+ui-plus|UiPlus.cs
+unburnable-meat|UnburnableMeat.cs
+vanish|Vanish.cs
+vehicle-decay-protection|VehicleDecayProtection.cs
+vehicle-deployed-locks|VehicleDeployedLocks.cs
+vehicle-license|VehicleLicence.cs
+whitelist|Whitelist.cs
+zone-domes|ZoneDomes.cs
+zone-manager-auto-zones|ZoneManagerAutoZones.cs
+zone-manager|ZoneManager.cs
