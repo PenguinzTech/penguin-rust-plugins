@@ -1,0 +1,14 @@
+{
+  "slug": "imagelibrary",
+  "filename": "ImageLibrary.cs",
+  "version": "1776308517",
+  "sha256": "cf057ba73dbf6de5f40782035032fdaf990f5ce73d7132aae832a75737c99936",
+  "source_url": "https://umod.org/plugins/imagelibrary",
+  "source_raw_url": "https://umod.org/plugins/imagelibrary.cs",
+  "source_api_url": "https://umod.org/plugins/imagelibrary.json",
+  "upstream_author": "k1lly0u",
+  "upstream_version": "2.0.64",
+  "fetched_at": "2026-04-16T03:01:58Z",
+  "fetched_by": "https://github.com/PenguinzTech/penguin-rust-plugins/actions/runs/24489650839",
+  "attribution_notice": "Source: https://umod.org/plugins/imagelibrary — author: k1lly0u. Redistributed unmodified; all rights remain with the upstream author and umod.org."
+}
