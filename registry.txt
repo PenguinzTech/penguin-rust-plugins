@@ -32,3 +32,4 @@ vehicle-deployed-locks|VehicleDeployedLocks.cs
 whitelist|Whitelist.cs
 zone-domes|ZoneDomes.cs
 zone-manager-auto-zones|ZoneManagerAutoZones.cs
+imagelibrary|ImageLibrary.cs
