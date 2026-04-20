@@ -2,8 +2,10 @@
 # Canonical list of plugins in this repo — slug|FileName.cs
 # Each entry has a corresponding plugins/${slug}/ directory and
 admin-deep-cover|AdminDeepCover.cs
+admin-radar|AdminRadar.cs
 admin-utilities|AdminUtilities.cs
 automated-events|AutomatedEvents.cs
+back-pump-jack|BackPumpJack.cs
 better-chat-filter|BetterChatFilter.cs
 better-chat-flood|BetterChatFlood.cs
 better-chat-global-mute|BetterChatGlobalMute.cs
@@ -11,15 +13,23 @@ better-chat-ignore|BetterChatIgnore.cs
 better-chat-mentions|BetterChatMentions.cs
 better-chat-toggle|BetterChatToggle.cs
 bgrade|BGrade.cs
+chest-stack-multiplier|ChestStackMultiplier.cs
 clan-tags|ClanTags.cs
 clans|Clans.cs
 copy-paste|CopyPaste.cs
+custom-vending-setup|CustomVendingSetup.cs
+diseases|Diseases.cs
 economics|Economics.cs
 emote|Emote.cs
 friendly-fire|FriendlyFire.cs
+guarded-crate|GuardedCrate.cs
 gui-announcements|GUIAnnouncements.cs
 landlord|LandLord.cs
+monument-finder|MonumentFinder.cs
+morning-fog|MorningFog.cs
 night-lantern|NightLantern.cs
+pets|Pets.cs
+radtown-animals|RadtownAnimals.cs
 remover-tool|RemoverTool.cs
 safespace|SafeSpace.cs
 stack-size-controller|StackSizeController.cs
