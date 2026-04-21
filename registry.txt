@@ -23,6 +23,7 @@ emote|Emote.cs
 friendly-fire|FriendlyFire.cs
 guarded-crate|GuardedCrate.cs
 gui-announcements|GUIAnnouncements.cs
+info-panel|InfoPanel.cs
 landlord|LandLord.cs
 monument-finder|MonumentFinder.cs
 night-lantern|NightLantern.cs
