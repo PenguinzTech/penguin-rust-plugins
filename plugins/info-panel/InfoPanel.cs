@@ -598,6 +598,7 @@ namespace Oxide.Plugins
 
             public bool CheckPanelAvailability(string Panel)
             {
+                if (Panels == null || Docks == null) return false;
                 PanelConfig panelConfig;
                 if (!Panels.TryGetValue(Panel, out panelConfig))
                     return false;
@@ -1059,6 +1060,7 @@ namespace Oxide.Plugins
 
         void OnPluginUnloaded(Plugin plugin)
         {
+            if (Settings == null || Settings.ThirdPartyPanels == null) return;
             if (!Settings.ThirdPartyPanels.ContainsKey(plugin.Title)) return;
             var PluginPanels = LoadedPluginPanels[plugin.Title];
 
@@ -1093,6 +1095,7 @@ namespace Oxide.Plugins
         /// <param name="Player"></param>
         private void LoadPanels(BasePlayer Player)
         {
+            if (Settings.Docks == null || Settings.Panels == null) return;
             foreach (var Docks in Settings.Docks)
             {
                 if (!Settings.Docks[Docks.Key].Available)
@@ -2820,6 +2823,7 @@ namespace Oxide.Plugins
 
         private void DestroyGUI(BasePlayer player)
         {
+            if (!PlayerDockPanels.ContainsKey(player.UserIDString)) return;
             foreach (var Dock in PlayerDockPanels[player.UserIDString])
             {
                 Dock.Value.DestroyPanel(false);
@@ -2848,6 +2852,7 @@ namespace Oxide.Plugins
             if (!storedData.GetPlayerSettings(player.UserIDString, "enable", true))
                 return;
 
+            if (!PlayerPanels.ContainsKey(player.UserIDString)) return;
             foreach (var Panel in PlayerPanels[player.UserIDString])
             {
                 switch (Panel.Key)
